@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>For You 💗</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <style>
+    :root {
+      --bg1: #ffdde1;
+      --bg2: #ee9ca7;
+      --card: #ffffff;
+      --text: #333;
+      --accent: #ee6a7c;
+      --soft: #fff0f5;
+    }
+
+    body.dark {
+      --bg1: #1f1f25;
+      --bg2: #3a3a44;
+      --card: #2b2b33;
+      --text: #f2f2f2;
+      --soft: #3a3a44;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', Arial, sans-serif;
+      background: linear-gradient(135deg, var(--bg1), var(--bg2));
+      color: var(--text);
+      text-align: center;
+      transition: background 0.6s ease, color 0.6s ease;
+    }
+
+    /* HERO */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 60px 20px;
+    }
+
+    .hero h1 { font-size: 3.6rem; margin-bottom: 10px; }
+    .hero p { max-width: 750px; font-size: 1.2rem; }
+
+    .top-controls {
+      position: fixed;
+      top: 15px;
+      right: 15px;
+      z-index: 10;
+    }
+
+    button {
+      padding: 10px 20px;
+      margin: 5px;
+      border: none;
+      border-radius: 22px;
+      background: var(--accent);
+      color: white;
+      font-size: 0.95rem;
+      cursor: pointer;
+    }
+
+    /* CARDS */
+    .card {
+      background: var(--card);
+      margin: 60px auto;
+      padding: 40px 30px;
+      max-width: 900px;
+      border-radius: 22px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.25);
+    }
+
+    h2 { font-size: 2.2rem; margin-top: 0; }
+
+    p { font-size: 1.1rem; line-height: 1.7; max-width: 760px; margin: 0 auto; }
+
+    /* SLIDESHOW */
+    .slideshow img {
+      width: 100%;
+      max-width: 460px;
+      border-radius: 18px;
+      margin: 25px 0 15px;
+      box-shadow: 0 12px 28px rgba(0,0,0,0.25);
+      cursor: pointer;
+    }
+
+    .slide-text { font-size: 1.05rem; }
+
+    /* GRID */
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 18px;
+      margin-top: 30px;
+    }
+
+    .mini {
+      background: var(--soft);
+      padding: 22px;
+      border-radius: 18px;
+      box-shadow: 0 6px 15px rgba(0,0,0,0.15);
+    }
+
+    /* COUNTDOWN */
+    .countdown {
+      font-size: 1.4rem;
+      margin-top: 20px;
+      font-weight: bold;
+    }
+
+    /* HIDDEN MESSAGE */
+    .hidden {
+      display: none;
+      margin-top: 20px;
+      font-size: 1.1rem;
+    }
+
+    /* MODAL */
+    .modal {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.7);
+      justify-content: center;
+      align-items: center;
+      z-index: 20;
+    }
+
+    .modal img {
+      max-width: 90%;
+      max-height: 90%;
+      border-radius: 18px;
+    }
+
+    footer { padding: 30px; font-size: 0.9rem; opacity: 0.85; }
+  </style>
+</head>
+
+<body>
+
+<div class="top-controls">
+  <button onclick="toggleDark()">🌙 Dark Mode</button>
+</div>
+
+<section class="hero">
+  <h1>Hi 💕</h1>
+  <p>
+    This page exists for one reason — to remind you how special, beautiful,
+    and genuinely amazing you are.
+  </p>
+</section>
+
+<section class="card slideshow">
+  <h2>Moments I Love</h2>
+  <img id="slideImage" src="KZMJ7822.JPG" alt="Memory" onclick="openModal(this.src)">
+  <p class="slide-text" id="slideText"></p>
+  <button onclick="prevSlide()">Previous</button>
+  <button onclick="nextSlide()">Next</button>
+</section>
+
+<section class="card">
+  <h2>Why You’re Perfect the Way You Are</h2>
+  <p>
+    You don’t need to change a single thing. Your kindness, confidence, and
+    authenticity make you incredibly beautiful — inside and out. You bring
+    warmth into every space you’re in, and that’s something truly rare.
+  </p>
+  <div class="grid">
+    <div class="mini">Your smile feels genuine and warm.</div>
+    <div class="mini">You make people feel comfortable.</div>
+    <div class="mini">Your confidence is natural, not forced.</div>
+    <div class="mini">You’re strong even on hard days.</div>
+    <div class="mini">You’re beautiful without trying.</div>
+    <div class="mini">You stay true to yourself.</div>
+  </div>
+</section>
+
+<section class="card">
+  <h2>Countdown to Something Special</h2>
+  <p>A small reminder that good moments are always ahead.</p>
+  <div class="countdown" id="countdown"></div>
+</section>
+
+<section class="card">
+  <h2>A Hidden Note 💌</h2>
+  <button onclick="reveal()">Click to reveal</button>
+  <p class="hidden" id="hiddenMsg">
+    No matter where life goes, you’ll always be someone I care deeply about.
+    You matter more than you realize.
+  </p>
+</section>
+
+<footer>
+  Made with care ✨
+</footer>
+
+<div class="modal" id="modal" onclick="closeModal()">
+  <img id="modalImg">
+</div>
+
+<script>
+  const slides = [
+    { image: 'KZMJ7822.JPG', text: 'This moment shows your natural confidence and warmth.' },
+    { image: 'IMG_4292.PNG', text: 'You look effortlessly beautiful here — completely yourself.' },
+    { image: 'IMG_4154.PNG', text: 'Your presence makes moments feel lighter and happier.' },
+    { image: 'IMG_4131.PNG', text: 'Genuine, kind, and confident — that’s you.' }
+  ];
+
+  let current = 0;
+
+  function showSlide() {
+    document.getElementById('slideImage').src = slides[current].image;
+    document.getElementById('slideText').textContent = slides[current].text;
+  }
+
+  function nextSlide() { current = (current + 1) % slides.length; showSlide(); }
+  function prevSlide() { current = (current - 1 + slides.length) % slides.length; showSlide(); }
+
+  function toggleDark() { document.body.classList.toggle('dark'); }
+
+  function reveal() { document.getElementById('hiddenMsg').style.display = 'block'; }
+
+  function openModal(src) {
+    document.getElementById('modal').style.display = 'flex';
+    document.getElementById('modalImg').src = src;
+  }
+
+  function closeModal() { document.getElementById('modal').style.display = 'none'; }
+
+  // COUNTDOWN (change date if you want)
+  const target = new Date('2026-06-01').getTime();
+  setInterval(() => {
+    const now = new Date().getTime();
+    const diff = target - now;
+    if (diff > 0) {
+      const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+      document.getElementById('countdown').textContent = days + ' days to go ✨';
+    }
+  }, 1000);
+
+  showSlide();
+</script>
+
+</body>
+</html>
